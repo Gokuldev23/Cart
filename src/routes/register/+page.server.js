@@ -2,15 +2,12 @@
 import { redirect } from '@sveltejs/kit';
 import PocketBase from 'pocketbase';
 
-const pb = new PocketBase('http://127.0.0.1:8090');
 
 // example create data
 
-
-
-
 export const actions={
     register: async ({cookies, request }) => {
+        const pb = new PocketBase('http://127.0.0.1:8090')
 		const formData = await request.formData();
         const form=Object.fromEntries([...formData])
         let data = {
@@ -30,8 +27,10 @@ export const actions={
         }
         catch(error){
             console.log("error",error)
+            
             return {
-                notVerified:true
+                notVerified:true,
+                err:JSON.stringify(error)
             }
         }
         throw redirect(300,'/login')
