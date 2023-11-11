@@ -40,7 +40,7 @@
 			class="card card-compact  {item.stock==0?'bg-red-100':'bg-green-100'} shadow-xl transition-all duration-500 hover:shadow-2xl hover:bg-gradient-to-b hover:from-white hover:via-green-200 hover:to-green-300"
 		>
 			<figure>
-				<img class="" src="{item.name}.jpg" alt="Shoes" />
+				<img class="" src="https://qbtrix.pockethost.io/api/files/{item.collectionId}/{item.id}/{item.image}" alt="Shoes" />
 			</figure>
 			<div class="card-body">
 				<h2 class="card-title md:text-base text-sm capitalize">{item.name}</h2>
