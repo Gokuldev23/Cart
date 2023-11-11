@@ -1,16 +1,13 @@
 <script>
+	import { onMount } from 'svelte';
 	import {addToCart} from '../index'
-
-	let items = [
-		{quantity:1,stock:9, name: 'cucumber', price: 40 },
-		{quantity:1,stock:9, name: 'onion', price: 39 },
-		{quantity:1,stock:9, name: 'peas', price: 69 },
-		{quantity:1,stock:9, name: 'tomato', price: 87 },
-		{quantity:1,stock:9, name: 'chilli', price: 78 }
-	];
+	import { enhance } from '$app/forms';
 
 	//for immutable purpose
-	let originalArray=[...items]
+
+	export let product=[]
+
+	console.log(product)
 
 	//for filter movies
 	let movieStr=''
@@ -38,9 +35,9 @@
 	
 
 
-	{#each items as item, i}
+	{#each product as item, i}
 		<div
-			class="card card-compact bg-green-100 shadow-xl transition-all duration-500 hover:shadow-2xl hover:bg-gradient-to-b hover:from-white hover:via-green-200 hover:to-green-300"
+			class="card card-compact  {item.stock==0?'bg-red-100':'bg-green-100'} shadow-xl transition-all duration-500 hover:shadow-2xl hover:bg-gradient-to-b hover:from-white hover:via-green-200 hover:to-green-300"
 		>
 			<figure>
 				<img class="" src="{item.name}.jpg" alt="Shoes" />
@@ -51,11 +48,17 @@
 				<div class="card-actions justify-between items-center">
 					<span class="text-xl font-semibold text-green-900">{item.price} Rs</span>
 
-					<button
-						on:click={() => addToCart(item)}
-						class="btn md:btn-md btn-sm bg-purple-700 hover:bg-purple-600 text-white"
-						>Add to cart</button
-					>
+					{#if item.stock>0}
+						<form use:enhance action="/addProduct" method="post">
+							<button
+								on:click={() => addToCart(item)}
+								class="btn md:btn-md btn-sm bg-purple-700 hover:bg-purple-600 text-white"
+								>Add to cart</button
+							>
+						</form>
+						{:else}
+						<span class="text-slate-200 bg-red-500 p-2 px-4 rounded-lg text-lg font-semibold">Out of Stock</span>
+					{/if}
 				</div>
 			</div>
 		</div>

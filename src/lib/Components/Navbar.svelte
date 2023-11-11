@@ -1,5 +1,8 @@
 <script>
 	let dummyImg = 'https://www.gravatar.com/avatar/2c7d99fe281ecd3bcd65ab915bac6dd5?s=250';
+	export let profile
+
+	$:console.log(profile)
 
 </script>
 
@@ -50,17 +53,19 @@
 				tabindex="0"
 				class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-neutral-100 rounded-box w-52"
 			>
-				<li>
-					<!-- svelte-ignore a11y-invalid-attribute -->
-					<a href="/register" class="justify-between">
-						Register
-						<span class="badge">New</span>
-					</a>
-				</li>
-				<!-- svelte-ignore a11y-missing-attribute -->
-				<!-- <li><a>Settings</a></li> -->
-				<!-- svelte-ignore a11y-missing-attribute -->
-				<li><a href="/login"> Login</a></li>
+				{#if !profile}
+					<li>
+						<!-- svelte-ignore a11y-invalid-attribute -->
+						<a href="/register" class="justify-between">
+							Register
+						</a>
+					</li>
+					<li><a href="/login"> Login</a></li>
+					{:else}
+					<form action="/logout" method="post">
+					<button class="btn btn-error w-full btn-sm">Logout</button>
+					</form>
+					{/if}
 			</ul>
 		</div>
 	</div>

@@ -1,13 +1,8 @@
 
 import { redirect } from '@sveltejs/kit';
-import PocketBase from 'pocketbase';
-
-
-// example create data
 
 export const actions={
-    register: async ({cookies, request }) => {
-        const pb = new PocketBase('http://127.0.0.1:8090')
+    register: async ({locals, request }) => {
 		const formData = await request.formData();
         const form=Object.fromEntries([...formData])
         let data = {
@@ -22,12 +17,11 @@ export const actions={
         data=JSON.stringify(data)
         console.log("data",data)
         try{
-            let record = await pb.collection('users').create(data);
-            console.log("record",record)
+            let record = await locals.pb.collection('users').create(data)
+            locals.pb.authStore.clear()
         }
         catch(error){
             console.log("error",error)
-            
             return {
                 notVerified:true,
                 err:JSON.stringify(error)
