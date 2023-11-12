@@ -1,5 +1,5 @@
 <script>
-export let data
+	export let data
 </script>
 
 <div class="hero min-h-screen bg-base-200">
