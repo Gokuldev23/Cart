@@ -26,15 +26,12 @@
 
 
 <div class="flex justify-center py-4 w-full">
-	<label class="block text-xl font-semibold" for="search">Serach Product
-		<input bind:value={movieStr} on:input={filter} type="text" name="search" id="search" class="border border-slate-600 rounded-xl p-2">
+	<label class="block text-xl font-semibold" for="search">Search Product
+		<input bind:value={movieStr} on:input={filter} type="text" name="search" id="search" class="border bg-white border-slate-600 rounded-xl p-2">
 	</label>
 </div>
 <div class="grid place-items-center gap-4 md:gap-10 px-4 grid-cols-2 md:grid-cols-4 py-10 z-10">
-
 	
-
-
 	{#each product as item, i}
 		<div
 			class="card card-compact  {item.stock==0?'bg-red-100':'bg-green-100'} shadow-xl transition-all duration-500 hover:shadow-2xl hover:bg-gradient-to-b hover:from-white hover:via-green-200 hover:to-green-300"
