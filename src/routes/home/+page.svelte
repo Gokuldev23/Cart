@@ -39,12 +39,11 @@
 			>
 				<figure class="h-44">
 					
-					<!-- {#await getImage(item.collectionId,item.id,item.image)}
+					{#await getImage(item.collectionId,item.id,item.image)}
 					<SkelteonImage/>
 					{:then}
 						<img class="" src="https://qbtrix.pockethost.io/api/files/{item.collectionId}/{item.id}/{item.image}" alt="Shoes" />
-					{/await} -->
-					<enhanced:img src="/beans.jpg" alt="An alt text" />
+					{/await}
 
 
 				</figure>
