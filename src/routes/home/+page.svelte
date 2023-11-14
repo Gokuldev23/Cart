@@ -2,8 +2,10 @@
 
 <script>
 	import { enhance } from '$app/forms';
+	import SkelteonImage from '../../lib/Components/SkelteonImage.svelte';
     export let data;
 	let movieStr=''
+
 	function filter(e){
 		const search = movieStr.toLowerCase();
 		if (!search) {
@@ -12,6 +14,11 @@
 		const matchingMovies = items.filter((item) => item.name.toLowerCase().includes(search));
 		const remainingMovies = items.filter((item) => !item.name.toLowerCase().includes(search));
 		items = [...matchingMovies, ...remainingMovies];
+	}
+
+	async function getImage(collectionId,id,image){
+		let img=await fetch(`https://qbtrix.pockethost.io/api/files/${collectionId}/${id}/${image}`)
+		return img
 	}
 </script>
 
@@ -30,8 +37,16 @@
 			<div
 				class="card card-compact  {item.stock==0?'bg-red-100':'bg-green-100'} shadow-xl transition-all duration-500 hover:shadow-2xl hover:bg-gradient-to-b hover:from-white hover:via-green-200 hover:to-green-300"
 			>
-				<figure>
-					<img class="" src="https://qbtrix.pockethost.io/api/files/{item.collectionId}/{item.id}/{item.image}" alt="Shoes" />
+				<figure class="h-44">
+					
+					<!-- {#await getImage(item.collectionId,item.id,item.image)}
+					<SkelteonImage/>
+					{:then}
+						<img class="" src="https://qbtrix.pockethost.io/api/files/{item.collectionId}/{item.id}/{item.image}" alt="Shoes" />
+					{/await} -->
+					<enhanced:img src="/beans.jpg" alt="An alt text" />
+
+
 				</figure>
 				<div class="card-body">
 					<h2 class="card-title md:text-base text-sm capitalize">{item.name}</h2>
