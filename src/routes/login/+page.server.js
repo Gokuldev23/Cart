@@ -4,13 +4,6 @@ import { singleCart } from '../../lib';
 
 
 
-/** @type {import('./$types').PageLoad} */
-export async function load({locals}) {
-
-  let record=await singleCart('qett7m0yfuiarps')
-
-}
-
 
 
 export const actions={
