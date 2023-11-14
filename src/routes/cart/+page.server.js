@@ -2,7 +2,7 @@
 import { redirect } from '@sveltejs/kit';
 import eventsource from 'eventsource';
 import { fail } from '@sveltejs/kit';
-import { singleCart, singleProduct } from '../../lib';
+import { singleCart, singleProduct, userCartItems } from '../../lib';
 
 global.EventSource = eventsource;
 
@@ -11,13 +11,7 @@ global.EventSource = eventsource;
 export async function load({locals}) {
   
 if(locals.pb.authStore.baseToken){
-    const res=await locals.pb.collection('cart').getFullList({
-        sort:'created',
-        expand:'user'
-    })
-    let cartItems=res.filter(u=>locals.pb.authStore.baseModel.id==u.user)
-    // console.log('cartItems=====',cartItems)
-    //  let result=products.filter(product=>product.id)
+    const res=await userCartItems(locals.pb.authStore.baseModel.id)
     return {cartItems}
 }
 return{
