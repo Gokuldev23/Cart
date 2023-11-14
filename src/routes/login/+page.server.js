@@ -1,7 +1,17 @@
 import { redirect } from '@sveltejs/kit';
-import PocketBase from 'pocketbase';
+import { singleCart } from '../../lib';
 
-const pb = new PocketBase('http://127.0.0.1:8090');
+
+
+
+/** @type {import('./$types').PageLoad} */
+export async function load({locals}) {
+
+  let record=await singleCart('qett7m0yfuiarps')
+
+}
+
+
 
 export const actions={
     login: async ({ locals, request }) => {
@@ -14,7 +24,6 @@ export const actions={
                 form.password,
             );
             console.log("Token",token,"user",user)
-
         }
         catch(err){
             return {
@@ -22,6 +31,5 @@ export const actions={
             }
         }
         throw redirect(303,'/home')
-
 	},
 }

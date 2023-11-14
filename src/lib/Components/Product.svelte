@@ -1,15 +1,9 @@
 <script>
-	import { onMount } from 'svelte';
 	import {addToCart} from '../index'
 	import { enhance } from '$app/forms';
 
-	//for immutable purpose
-
 	export let product=[]
 
-	console.log(product)
-
-	//for filter movies
 	let movieStr=''
 	function filter(e){
 		const search = movieStr.toLowerCase();
@@ -25,39 +19,35 @@
 
 
 
-<div class="flex justify-center py-4 w-full">
-	<label class="block text-xl font-semibold" for="search">Search Product
-		<input bind:value={movieStr} on:input={filter} type="text" name="search" id="search" class="border bg-white border-slate-600 rounded-xl p-2">
-	</label>
-</div>
-<div class="grid place-items-center gap-4 md:gap-10 px-4 grid-cols-2 md:grid-cols-4 py-10 z-10">
-	
-	{#each product as item, i}
-		<div
-			class="card card-compact  {item.stock==0?'bg-red-100':'bg-green-100'} shadow-xl transition-all duration-500 hover:shadow-2xl hover:bg-gradient-to-b hover:from-white hover:via-green-200 hover:to-green-300"
-		>
-			<figure>
-				<img class="" src="https://qbtrix.pockethost.io/api/files/{item.collectionId}/{item.id}/{item.image}" alt="Shoes" />
-			</figure>
-			<div class="card-body">
-				<h2 class="card-title md:text-base text-sm capitalize">{item.name}</h2>
-				<p class="text-xm md:text-sm">If a dog chews shoes whose shoes does he choose?</p>
-				<div class="card-actions justify-between items-center">
-					<span class="text-xl font-semibold text-green-900">{item.price} Rs</span>
-
-					{#if item.stock>0}
-						<form use:enhance action="/addProduct" method="post">
-							<button
-								on:click={() => addToCart(item)}
-								class="btn md:btn-md btn-sm bg-purple-700 hover:bg-purple-600 text-white"
-								>Add to cart</button
-							>
-						</form>
-						{:else}
-						<span class="text-slate-200 bg-red-500 p-2 px-4 rounded-lg text-lg font-semibold">Out of Stock</span>
-					{/if}
-				</div>
-			</div>
-		</div>
-	{/each}
+<span class="text-lg font-bold">
+	{i+1}.
+</span>
+<div class="flex gap-x-4 items-center">
+	<div class="flex gap-x-2 items-centers w-32">
+		<!-- <img src="{product.name.toLowerCase()}.jpg" class="w-10 rounded-lg" alt=""> -->
+		<span class="font-semibold text-slate-700">{product.name}</span>
+	</div>
+	<div>
+		<div class="flex gap-x-3 self-center border border-gray-200 p.5 w-fit rounded-xl items-center">
+			<form use:enhance action="?/minus" method="post">
+				<input type="text" id="id" name="id" value="{JSON.stringify({id:product.id,name:product.name,quantity:product.quantity})}" hidden>
+				<button type="submit"  class="btn btn-sm {product.quantity==1?'btn-disabled':''}">
+				  <i class="fa text-xl">&#xf068;</i>
+				</button> 
+			</form>
+			<div class="text-lg font-semibold">{product.quantity}</div>
+			<form action="?/add" method="post" use:enhance>
+				<input type="text" id="id" name="id" value="{JSON.stringify({id:product.id,name:product.name,quantity:product.quantity})}" hidden>
+				<button  class="btn btn-sm ">
+				  <i  class="fa text-xl">&#xf067;</i>
+				</button>
+			</form>
+		  </div>
+	</div>
+	<form use:enhance action="?/delete" method="post">
+		<input type="text" id="id" name="id" value="{product.id}" hidden>
+		<button type="submit" class="btn btn-sm">
+			<i class="fa-solid fa-trash"></i>
+		</button>
+	</form>
 </div>

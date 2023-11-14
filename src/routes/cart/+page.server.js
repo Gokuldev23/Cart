@@ -1,26 +1,24 @@
 
 import { redirect } from '@sveltejs/kit';
-import PocketBase from 'pocketbase';
+import eventsource from 'eventsource';
+import { fail } from '@sveltejs/kit';
+import { singleCart, singleProduct } from '../../lib';
 
-// const pb = new PocketBase('http://127.0.0.1:8090');
+global.EventSource = eventsource;
+
 
 /** @type {import('./$types').PageLoad} */
 export async function load({locals}) {
-
-// await pb.admins.authWithPassword('gokularise@gmail.com','gokulpocketbase')
-
+  
 if(locals.pb.authStore.baseToken){
-   
     const res=await locals.pb.collection('cart').getFullList({
         sort:'created',
         expand:'user'
     })
-
-    const product=res.filter(pr=>pr.user===locals.pb.authStore.baseModel.id)
-    // let product=record.
-
-    return {product}
-    console.log('----------Records----------',product)
+    let cartItems=res.filter(u=>locals.pb.authStore.baseModel.id==u.user)
+    // console.log('cartItems=====',cartItems)
+    //  let result=products.filter(product=>product.id)
+    return {cartItems}
 }
 return{
     empty:false
@@ -34,22 +32,55 @@ export const actions={
         const formData = await request.formData();
         const form=Object.fromEntries([...formData])
 
-        let data=JSON.parse(form.id)
+   
+        let data=await singleCart(form.id)
 
-        await pb.collection('cart').update(data.id,JSON.stringify({...data,quantity:data.quantity-=1}))
+
+        let product=await singleProduct(data.product)
+
+        let updatedProduct={
+            "name": product.name,
+            "price": product.price,
+            "stock": product.stock+1
+        };
+        await locals.pb.collection('products').update(data.product,JSON.stringify(updatedProduct))
+
+        await locals.pb.collection('cart').update(data.id,JSON.stringify(data))
     },
     add: async({locals,request})=>{
         const formData = await request.formData();
         const form=Object.fromEntries([...formData])
+        
+        let data=await singleCart(form.id)
+        console.log(data)
+        let product=await singleProduct(data.product)
 
-        let data=JSON.parse(form.id)
 
-        await pb.collection('cart').update(data.id,JSON.stringify({...data,quantity:data.quantity+=1}))
+        let updatedProduct={
+            "name": product.name,
+            "price": product.price,
+            "stock": product.stock-1
+        };
+        try{
+            if(product.stock>0){
+
+                await locals.pb.collection('products').update(data.product,JSON.stringify(updatedProduct))
+        
+                await locals.pb.collection('cart').update(data.id,JSON.stringify(data))
+            }
+            else
+            {
+            return fail(401, { outOfStock: form.id });
+            }
+        }
+        catch(err){
+            console.log(err)
+        }
     },
     delete:async({locals,request})=>{
         const formData = await request.formData();
         const form=Object.fromEntries([...formData])
 
-        await pb.collection('cart').delete(form.id)
+        await locals.pb.collection('cart').delete(form.id)
 
 }}

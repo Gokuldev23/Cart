@@ -1,15 +1,23 @@
 <script>
 	import { enhance } from '$app/forms';
+	import { fly } from 'svelte/transition';
+  import {user} from '../../lib/index'
+
+  let a=''
+  user.subscribe(n=>a=n)
+
+  console.log(a)
+
   export let form;
 </script>
 
 <div class="hero min-h-screen bg-white">
     <div class="hero-content flex-col lg:flex-row-reverse">
-      <div class="text-center lg:text-left">
+      <div in:fly={{x:'100px',duration:500}} class="text-center lg:text-left">
         <h1 class="text-5xl font-bold">Register now!</h1>
         <p class="py-6">Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda excepturi exercitationem quasi. In deleniti eaque aut repudiandae et a id nisi.</p>
       </div>
-      <div class="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
+      <div  in:fly={{x:'-100px',duration:500}} class="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
         <form use:enhance method="POST" action="?/register" class="card-body">
           <div class="form-control">
             <label for="name" class="label">
