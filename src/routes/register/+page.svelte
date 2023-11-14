@@ -1,12 +1,6 @@
 <script>
 	import { enhance } from '$app/forms';
 	import { fly } from 'svelte/transition';
-  import {user} from '../../lib/index'
-
-  let a=''
-  user.subscribe(n=>a=n)
-
-  console.log(a)
 
   export let form;
 </script>
